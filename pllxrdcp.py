@@ -9,6 +9,7 @@ parser.add_argument("-j","--jobs", type=int, default=32)
 parser.add_argument("-r","--recursive", action='store_true')
 parser.add_argument("-e", "--empty", action='store_true')
 parser.add_argument("-s", "--server", type=str, default = "eoscms.cern.ch")
+parser.add_argument("--maxFiles", type=int, default=None)
 parser.add_argument("source", type=str, nargs=1)
 parser.add_argument("dest", type=str, nargs=1)
 
@@ -22,7 +23,6 @@ if args.recursive:
 cmds += args.source
     
 print(cmds)
-
 res = subprocess.run(cmds, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 res.check_returncode()
 
@@ -35,11 +35,14 @@ for f in lsfiles:
     filename = fsplit[-1]
     if args.empty or filesize != "0":
         lsfilenames.append(filename)
+if args.maxFiles and args.maxFiles < len(lsfilenames):
+    print(f"INFO: copying the first {args.maxFiles} of {len(lsfilenames)} valid files")
+    lsfilenames = lsfilenames[:args.maxFiles]
 
 basedir = args.source[0].split("/")[:-1]
 basedir = "/".join(basedir)
 
-infiles = [f"root://eoscms.cern.ch/{f}" for f in lsfilenames]
+infiles = [f"root://{args.server}/{f}" for f in lsfilenames]
 outfiles = [f.replace(basedir, args.dest[0]) for f in lsfilenames]
 
 def xrdcp(files):
