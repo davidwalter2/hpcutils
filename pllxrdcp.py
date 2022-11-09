@@ -11,8 +11,8 @@ parser.add_argument("-e", "--empty", action='store_true')
 parser.add_argument("-s", "--server", type=str, default = "eoscms.cern.ch")
 parser.add_argument("--maxFiles", type=int, default=None)
 parser.add_argument("--dryRun", action='store_true', help="Print command but don't copy")
-parser.add_argument("source", type=str, nargs=1)
-parser.add_argument("dest", type=str, nargs=1)
+parser.add_argument("source", type=str)
+parser.add_argument("dest", type=str)
 
 args = parser.parse_args();
 
