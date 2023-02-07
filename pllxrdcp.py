@@ -44,7 +44,7 @@ if args.maxFiles and args.maxFiles < len(lsfilenames):
 basedir = args.source.rstrip("/").split("/")[:-1]
 basedir = "/".join(basedir)
 
-infiles = [f"root://eoscms.cern.ch/{f}" for f in lsfilenames]
+infiles = [f"root://{args.server}/{f}" for f in lsfilenames]
 outfiles = [f.replace(basedir, args.dest) for f in lsfilenames]
 
 if args.dryRun:
